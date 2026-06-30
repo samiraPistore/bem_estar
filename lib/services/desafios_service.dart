@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:bem_estar/models/desafio_model.dart'; // Importe o seu modelo aqui
 
 class DesafiosService {
-  static const String _baseUrl = 'https://workspace.dinizeotecnologia.com.br/seletiva_pr_a2/desafio';
+  static const String _baseUrl = 'https://workspace.dinizeotecnologia.com.br/seletiva_pr_a2/desafios';
 
   /// Busca o desafio enviando o ID dinâmico e o Token Bearer
   Future<Desafio?> getDesafios(int idDesafio, String token) async {
