@@ -3,11 +3,15 @@ import 'package:bem_estar/pages/home_screen.dart';
 import 'package:bem_estar/pages/login_screen.dart';
 import 'package:bem_estar/pages/sobre_screen.dart';
 import 'package:bem_estar/pages/splash_screen.dart';
+import 'package:bem_estar/providers/splash_provider.dart';
 import 'package:bem_estar/routes/app_routes.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    ChangeNotifierProvider(create: (ctx) => SplashProvider(), child: MyApp()),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -16,6 +20,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
         colorScheme: ColorScheme.light(
@@ -31,8 +36,8 @@ class MyApp extends StatelessWidget {
         AppRoutes.splash: (ctx) => SplashScreen(),
         AppRoutes.login: (ctx) => LoginScreen(),
         AppRoutes.home: (ctx) => HomeScreen(),
-        AppRoutes.dessafiosC: (ctx) =>  DesafiosScreen(),
-        AppRoutes.sobre: (ctx) => SobreScreen() 
+        AppRoutes.dessafiosC: (ctx) => DesafiosScreen(),
+        AppRoutes.sobre: (ctx) => SobreScreen(),
       },
     );
   }
