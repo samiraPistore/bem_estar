@@ -3,6 +3,7 @@ import 'package:bem_estar/pages/home_screen.dart';
 import 'package:bem_estar/pages/login_screen.dart';
 import 'package:bem_estar/pages/sobre_screen.dart';
 import 'package:bem_estar/pages/splash_screen.dart';
+import 'package:bem_estar/providers/auth_provider.dart';
 import 'package:bem_estar/providers/splash_provider.dart';
 import 'package:bem_estar/routes/app_routes.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +11,7 @@ import 'package:provider/provider.dart';
 
 void main() {
   runApp(
-    ChangeNotifierProvider(create: (ctx) => SplashProvider(), child: MyApp()),
+    MultiProvider(providers: [ChangeNotifierProvider(create: (ctx) => SplashProvider()), ChangeNotifierProvider(create: (ctx)=> AuthProvider()) ] ,child: MyApp()),
   );
 }
 
