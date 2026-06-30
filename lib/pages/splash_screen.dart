@@ -32,18 +32,24 @@ class _SplashScreenState extends State<SplashScreen> {
   Future<void> _start() async {
     final splashProvider = Provider.of<SplashProvider>(context, listen: false);
 
+    // Aguarda checagem da api e verifica se tem token salvo
     await splashProvider.startApp();
 
-    // Verifica o resultado do estado
     if (!mounted) return;
 
     if (splashProvider.status == SplashStatus.success) {
-      Navigator.pushReplacementNamed(context, '/login');
+     
+      // Se tiver login salvo vai para home
+      if (splashProvider.usuarioJaLogado) {
+        Navigator.pushReplacementNamed(context, '/home');
+      } else {
+        Navigator.pushReplacementNamed(context, '/login');
+      }
     } else if (splashProvider.status == SplashStatus.error) {
       _exibirPopupErro();
     }
   }
-
+  
   void _exibirPopupErro() {
     showDialog(
       context: context,
@@ -70,21 +76,23 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Image.asset(
-              'assets/logo.png',
-              width: size.width * 0.6,
-            ),
-
-            SizedBox(height: size.height * 0.04),
-            SizedBox(
-              width: size.width * 0.6,
-              child: LinearProgressIndicator())
-          ],
+      body: SafeArea(
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Image.asset(
+                'assets/logo.png',
+                width: size.width * 0.6,
+              ),
+        
+              SizedBox(height: size.height * 0.04),
+              SizedBox(
+                width: size.width * 0.6,
+                child: LinearProgressIndicator())
+            ],
+          ),
         ),
       ),
     );

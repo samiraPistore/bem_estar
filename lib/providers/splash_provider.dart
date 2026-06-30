@@ -1,30 +1,49 @@
-import 'package:bem_estar/services/splassh_service.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 enum SplashStatus { loading, success, error }
 
 class SplashProvider extends ChangeNotifier {
-  //instância do service
-  final SplashService _service = SplashService();
   SplashStatus _status = SplashStatus.loading;
+  bool _usuarioJaLogado = false;
 
   SplashStatus get status => _status;
+  bool get usuarioJaLogado => _usuarioJaLogado;
 
   Future<void> startApp() async {
     _status = SplashStatus.loading;
     notifyListeners();
 
-    // Executa a requisição de API
-    final isOnline = await _service.checkStatus();
+    try {
+      
 
-    await Future.delayed(Duration(milliseconds: 3000));
+      // Checa se existe um token
+      final prefs = await SharedPreferences.getInstance();
+      final String? token = prefs.getString('token_jwt');
+      final String? loginTimeStr = prefs.getString('login_time');
 
-    if (isOnline) {
+      if (token != null && loginTimeStr != null) {
+        final loginTime = DateTime.parse(loginTimeStr);
+        final diferencaEmMinutos = DateTime.now().difference(loginTime).inMinutes;
+
+        
+        if (diferencaEmMinutos < 3) {
+          _usuarioJaLogado = true; // Indica que vai direto para a HomeScreen
+        } else {
+          // Token expirou
+          await prefs.remove('token_jwt');
+          await prefs.remove('login_time');
+          _usuarioJaLogado = false;
+        }
+      } else {
+        _usuarioJaLogado = false;
+      }
+
       _status = SplashStatus.success;
-    } else {
+    } catch (e) {
       _status = SplashStatus.error;
     }
-
+    
     notifyListeners();
   }
 }
