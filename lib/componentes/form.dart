@@ -1,11 +1,15 @@
+import 'package:bem_estar/componentes/btn_shape.dart';
 import 'package:flutter/material.dart';
 
 class LoginForm extends StatefulWidget {
   final bool isLoading;
   final Function(String username, String password) onSubmeter;
 
-  const LoginForm({Key? key, required this.isLoading, required this.onSubmeter})
-    : super(key: key);
+  const LoginForm({
+    super.key,
+    required this.isLoading,
+    required this.onSubmeter,
+  });
 
   @override
   State<LoginForm> createState() => _LoginFormState();
@@ -20,7 +24,7 @@ class _LoginFormState extends State<LoginForm> {
   @override
   void initState() {
     super.initState();
-    // Escuta as alterações dos campos 
+    // Escuta as alterações dos campos
     _nomeController.addListener(_validarCampos);
     _senhaController.addListener(_validarCampos);
   }
@@ -54,34 +58,65 @@ class _LoginFormState extends State<LoginForm> {
       key: _formKey,
       child: Column(
         children: [
-          TextFormField(
-            controller: _nomeController,
-            decoration: const InputDecoration(
-              labelText: 'Usuário',
-              hintText: 'Digite seu usuário',
+          Padding(
+            padding: const EdgeInsets.only(left: 20, right: 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Nome',textAlign: TextAlign.justify),
+                SizedBox(height: 10),
+                TextFormField(
+                  controller: _nomeController,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12.0),
+                    ),
+                  ),
+                  validator: (value) =>
+                      value == null || value.isEmpty ? 'Campo obrigatório' : null,
+                ),
+              ],
             ),
-            validator: (value) =>
-                value == null || value.isEmpty ? 'Campo obrigatório' : null,
           ),
+
           SizedBox(height: 16),
-          TextFormField(
-            controller: _senhaController,
-            obscureText: true,
-            decoration: const InputDecoration(
-              labelText: 'Senha',
-              hintText: 'Digite sua senha',
+
+          Padding(
+            padding: const EdgeInsets.only(left: 20, right: 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Senha',textAlign: TextAlign.justify),
+                SizedBox(height: 10),
+                TextFormField(
+                  controller: _senhaController,
+                  obscureText: true,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12.0),
+                    ),
+                  ),
+                  validator: (value) =>
+                      value == null || value.isEmpty ? 'Campo obrigatório' : null,
+                ),
+              ],
             ),
-            validator: (value) =>
-                value == null || value.isEmpty ? 'Campo obrigatório' : null,
           ),
+
           SizedBox(height: 32),
 
           // espera provider carregar
           widget.isLoading
               ? const CircularProgressIndicator()
-              : ElevatedButton(
-                  onPressed: _isBotaoHabilitado ? _submitForm : null,
-                  child: const Text('Entrar'),
+              : CustomBtn(
+                  title: 'Entrar',
+                  onpress: () {
+                    if (_isBotaoHabilitado = true) {
+                      _submitForm();
+                    } else {
+                      return null;
+                    }
+                  },
                 ),
         ],
       ),

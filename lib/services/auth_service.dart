@@ -2,17 +2,12 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class AuthService {
-  final String _url =
-      'https://workspace.dinizeotecnologia.com.br/seletiva_pr_a2/login';
+ static const String _baseUrl = 'https://workspace.dinizeotecnologia.com.br/seletiva_pr_a2/login';
 
-  /// Faz o POST de login e retorna o Map com os dados se der certo, ou null se falhar.
-  Future<Map<String, dynamic>?> login(
-    String username,
-    String password,
-  ) async {
+  
+  Future<Map<String, dynamic>?> login(String username, String password) async {
     try {
-      final response = await http.post(
-        Uri.parse(_url),
+      final response = await http.post(Uri.parse(_baseUrl),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({'username': username, 'password': password}),
       );

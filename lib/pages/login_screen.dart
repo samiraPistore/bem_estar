@@ -13,20 +13,20 @@ class LoginScreen extends StatelessWidget {
     final authProvider = context.watch<AuthProvider>();
 
     return Scaffold(
-      body: Center(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24.0),
+      body: SingleChildScrollView(
+        padding: EdgeInsets.all(30.0),
+        child: SafeArea(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+          
             children: [
-    
+            
               Image.asset(
                 'assets/logo.png', 
-                width: MediaQuery.of(context).size.width * 0.2, 
+                width: MediaQuery.of(context).size.width * 0.4, 
               ),
               SizedBox(height: 40),
               
-              // Formulário com os parâmetros mapeados
+              
               LoginForm(
                 isLoading: authProvider.isLoading,
                 onSubmeter: (username, password) async {
@@ -40,7 +40,6 @@ class LoginScreen extends StatelessWidget {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
                         content: Text('Usuário ou senha incorretos.'),
-                        backgroundColor: Colors.redAccent,
                       ),
                     );
                   }

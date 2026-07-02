@@ -1,55 +1,52 @@
 import 'dart:io';
-
 import 'package:bem_estar/providers/splash_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 class SplashScreen extends StatefulWidget {
-  SplashScreen({super.key});
+  const SplashScreen({super.key});
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> {
+class _SplashScreenState extends State<SplashScreen>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _progressController;
+
   @override
   void initState() {
     super.initState();
+
+    // Configura a tela cheia
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+
+    // Inicializa a animação visual de 3 segundos
+    _progressController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 3),
+    )..forward();
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _start();
+      _iniciarFluxo();
     });
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-  }
-  
-  //chama o provider
-  Future<void> _start() async {
+  Future<void> _iniciarFluxo() async {
     final splashProvider = Provider.of<SplashProvider>(context, listen: false);
 
-    // Aguarda checagem da api e verifica se tem token salvo
-    await splashProvider.startApp();
-
+    // Aguarda a lógica de verificação rodar no Provider
+    await splashProvider.initializeApp();
     if (!mounted) return;
 
     if (splashProvider.status == SplashStatus.success) {
-     
-      // Se tiver login salvo vai para home
-      if (splashProvider.usuarioJaLogado) {
-        Navigator.pushReplacementNamed(context, '/home');
-      } else {
-        Navigator.pushReplacementNamed(context, '/login');
-      }
+      Navigator.pushReplacementNamed(context, '/login');
     } else if (splashProvider.status == SplashStatus.error) {
       _exibirPopupErro();
     }
   }
-  
+
   void _exibirPopupErro() {
     showDialog(
       context: context,
@@ -71,28 +68,54 @@ class _SplashScreenState extends State<SplashScreen> {
       },
     );
   }
+  
+  //Liberação de recursos
+  @override
+  void dispose() {
+    _progressController.dispose();
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
     return Scaffold(
-      body: SafeArea(
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Image.asset(
-                'assets/logo.png',
-                width: size.width * 0.6,
-              ),
-        
-              SizedBox(height: size.height * 0.04),
-              SizedBox(
-                width: size.width * 0.6,
-                child: LinearProgressIndicator())
-            ],
-          ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(
+              'assets/logo.png',
+              width: MediaQuery.of(context).size.width * 0.6,
+            ),
+
+            SizedBox(height: 40),
+
+            AnimatedBuilder(
+              animation: _progressController,
+              builder: (context, child) {
+                return Container(
+                  width: 200,
+                  height: 6,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[300],
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 200 * _progressController.value,
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF6C9BCF),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+          ],
         ),
       ),
     );

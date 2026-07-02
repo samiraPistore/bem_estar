@@ -1,8 +1,7 @@
 import 'package:http/http.dart' as http;
 
 class SplashService {
-  static const String _baseUrl =
-      'https://workspace.dinizeotecnologia.com.br/seletiva_pr_a2/status';
+  static const String _baseUrl ='https://workspace.dinizeotecnologia.com.br/seletiva_pr_a2/status';
 
   Future<bool> checkStatus() async {
     try {

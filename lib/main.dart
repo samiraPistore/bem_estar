@@ -32,20 +32,24 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
+        
         colorScheme: ColorScheme.light(
           primary: Color(0xFFA2DED0),
           secondary: Color(0xFFAED6F1),
           surface: Color(0xFFF7F7F7),
           onSurface: Color(0xFF333333),
+          
         ),
+        
         scaffoldBackgroundColor: Color(0xFFEDEDED),
+    
       ),
       initialRoute: AppRoutes.splash,
       routes: {
         AppRoutes.splash: (ctx) => SplashScreen(),
         AppRoutes.login: (ctx) => LoginScreen(),
         AppRoutes.home: (ctx) => HomeScreen(),
-        AppRoutes.dessafiosC: (ctx) => DesafiosScreen(),
+        AppRoutes.desafiosC: (ctx) => DesafiosCScreen(),
         AppRoutes.sobre: (ctx) => SobreScreen(),
       },
     );

@@ -1,31 +1,39 @@
 import 'dart:convert';
+import 'package:bem_estar/models/desafio_model.dart';
 import 'package:http/http.dart' as http;
-import 'package:bem_estar/models/desafio_model.dart'; // Importe o seu modelo aqui
+
 
 class DesafiosService {
-  static const String _baseUrl = 'https://workspace.dinizeotecnologia.com.br/seletiva_pr_a2/desafios';
+  static const String _baseUrl = 'https://workspace.dinizeotecnologia.com.br/seletiva_pr_a2/desafio';
 
-  /// Busca o desafio enviando o ID dinâmico e o Token Bearer
-  Future<Desafio?> getDesafios(int idDesafio, String token) async {
-    try {
-      // 1. Passa o ID correto na URL e não a palavra 'id'
-      final response = await http.get(
-        Uri.parse('$_baseUrl/$idDesafio'),
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer $token', // 2. Envia o token exigido pela API
-        },
-      ).timeout(const Duration(seconds: 10));
+  Future<Desafio?> getDesafios(int id, String token) async {
+  try {
+    final response = await http.get(
+      Uri.parse('$_baseUrl/$id'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token', 
+      },
+    );
 
-      // 3. Se retornar sucesso, decodifica o JSON para o modelo Desafio
-      if (response.statusCode == 200) {
-        final Map<String, dynamic> dadosJson = jsonDecode(response.body);
-        return Desafio.fromJson(dadosJson);
-      }
-      
-      return null; // Código diferente de 200 (ex: 401 não autorizado) retorna null
-    } catch (_) {
-      return null; // Qualquer falha de rede/timeout cai aqui
+
+    print('Status Code da API: ${response.statusCode}');
+    print('Corpo da Resposta da API: ${response.body}');
+    print('User token: ${token}');
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> dadosJson = jsonDecode(response.body);
+      return Desafio.fromJson(dadosJson);
     }
+    return null; 
+  } catch (error) {
+    print('Erro na requisição: $error');
+    return null; 
   }
 }
+}
+
+
+
+ 
+

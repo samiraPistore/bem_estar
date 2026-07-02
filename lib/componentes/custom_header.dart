@@ -9,38 +9,42 @@ class Header extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    return Column(
-      children: [
-        SizedBox(
-          width: size.width * 0.2,
-          child: GestureDetector(
-            onTap: () {
-              Navigator.of(
-                context,
-              ).pushNamedAndRemoveUntil(AppRoutes.home, (route) => false);
-            },
-            child: Image.asset("assets/logo.png", fit: BoxFit.contain),
+    return SafeArea(
+      child: Column(
+        children: [
+          SizedBox(
+            width: size.width * 0.2,
+            child: GestureDetector(
+              onTap: () {
+                Navigator.of(
+                  context,
+                ).pushNamedAndRemoveUntil(AppRoutes.home, (route) => false);
+              },
+              child: Image.asset("assets/logo.png", fit: BoxFit.contain),
+            ),
           ),
-        ),
-        SizedBox(height: 8),
-        Container(
-          decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.secondary,
-            borderRadius: BorderRadius.all(Radius.circular(20)),
-          ),
-          height: size.height * 0.08,
-          width: size.width * 0.8,
-          child: Center(
-            child: Text(
-              title,
-              textAlign: TextAlign.justify,
-              style: TextStyle(
-                fontSize: MediaQuery.of(context).size.height * 0.025,
+          SizedBox(height: 8),
+          Container(
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.secondary,
+              borderRadius: BorderRadius.all(Radius.circular(16)),
+            ),
+            height: size.height * 0.05,
+            width: size.width * 0.7,
+            child: Center(
+              child: Text(
+                title,
+                textAlign: TextAlign.justify,
+                style: TextStyle(
+                  fontSize: MediaQuery.of(context).size.height * 0.025,
+                  color: Theme.of(context).colorScheme.onSurface,
+                  fontWeight: FontWeight.bold
+                ),
               ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
